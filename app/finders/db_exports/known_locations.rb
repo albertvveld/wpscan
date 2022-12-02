@@ -17,13 +17,13 @@ module WPScan
         def aggressive(opts = {})
           found = []
 
-          enumerate(potential_urls(opts), opts.merge(check_full_response: 200)) do |res|
+          enumerate(potential_urls(opts), opts.merge(check_full_response: (200|206))) do |res|
             if res.effective_url.end_with?('.zip')
               next unless %r{\Aapplication/zip}i.match?(res.headers['Content-Type'])
             else
+              found << Model::DbExport.new(res.request.url, found_by: DIRECT_ACCESS, confidence: 100)
               next unless SQL_PATTERN.match?(res.body)
             end
-
             found << Model::DbExport.new(res.request.url, found_by: DIRECT_ACCESS, confidence: 100)
           end
 
