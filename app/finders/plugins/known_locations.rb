@@ -9,7 +9,7 @@ module WPScan
 
         # @return [ Array<Integer> ]
         def valid_response_codes
-          @valid_response_codes ||= [200, 401, 403, 500].freeze
+          @valid_response_codes ||= [200, 206, 401, 403, 500].freeze
         end
 
         # @param [ Hash ] opts
